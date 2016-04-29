@@ -22,9 +22,9 @@ class TwigServiceProvider extends ServiceProvider {
         {
             $loader = new Twig_Loader_Filesystem('/');
 
-            foreach ($this->app->getPlugins() as $plugin)
+            foreach ($this->app->getThemes() as $theme)
             {
-                $loader->addPath($plugin->getBasePath() . '/views', $plugin->getTwigNamespace());
+                $loader->addPath($theme->getBasePath() . '/views', $theme->getTwigNamespace());
             }
 
             return $loader;
@@ -51,6 +51,7 @@ class TwigServiceProvider extends ServiceProvider {
                 'view',
                 'content_directory',
                 'plugin_directory',
+                'theme_directory',
                 'panel_url',
                 'route_url',
                 'session',

@@ -3,12 +3,12 @@
 /**
  * Ensure this is only ran once.
  */
-if (defined('HERBERT_AUTOLOAD'))
+if (defined('CUTLASS_AUTOLOAD'))
 {
     return;
 }
 
-define('HERBERT_AUTOLOAD', microtime(true));
+define('CUTLASS_AUTOLOAD', microtime(true));
 
 @require 'helpers.php';
 
@@ -21,12 +21,12 @@ if (array_search(ABSPATH . 'wp-admin/includes/plugin.php', get_included_files())
 }
 
 /**
- * Get Herbert.
+ * Get Cutlass.
  */
-$herbert = Herbert\Framework\Application::getInstance();
+$cutlass = Cutlass\Framework\Application::getInstance();
 
 /**
- * Load all herbert.php files in plugin roots.
+ * Load all cutlass.php files in plugin roots.
  */
 $iterator = new DirectoryIterator(plugin_directory());
 
@@ -40,57 +40,57 @@ foreach ($iterator as $directory)
 
     $root = $directory->getPath() . '/' . $directory->getFilename();
 
-    if ( ! file_exists($root . '/herbert.config.php'))
+    if ( ! file_exists($root . '/cutlass.config.php'))
     {
         continue;
     }
 
-    $config = $herbert->getPluginConfig($root);
+    $config = $cutlass->getPluginConfig($root);
 
     $plugin = substr($root . '/plugin.php', strlen(plugin_directory()));
     $plugin = ltrim($plugin, '/');
 
-    register_activation_hook($plugin, function () use ($herbert, $config, $root)
+    register_activation_hook($plugin, function () use ($cutlass, $config, $root)
     {
-        if ( ! $herbert->pluginMatches($config))
+        if ( ! $cutlass->pluginMatches($config))
         {
-            $herbert->pluginMismatched($root);
+            $cutlass->pluginMismatched($root);
         }
 
-        $herbert->pluginMatched($root);
-        $herbert->loadPlugin($config);
-        $herbert->activatePlugin($root);
+        $cutlass->pluginMatched($root);
+        $cutlass->loadPlugin($config);
+        $cutlass->activatePlugin($root);
     });
 
-    register_deactivation_hook($plugin, function () use ($herbert, $root)
+    register_deactivation_hook($plugin, function () use ($cutlass, $root)
     {
-        $herbert->deactivatePlugin($root);
+        $cutlass->deactivatePlugin($root);
     });
 
     // Ugly hack to make the install hook work correctly
     // as WP doesn't allow closures to be passed here
-    register_uninstall_hook($plugin, create_function('', 'herbert()->deletePlugin(\'' . $root . '\');'));
+    register_uninstall_hook($plugin, create_function('', 'cutlass()->deletePlugin(\'' . $root . '\');'));
 
     if ( ! is_plugin_active($plugin))
     {
         continue;
     }
 
-    if ( ! $herbert->pluginMatches($config))
+    if ( ! $cutlass->pluginMatches($config))
     {
-        $herbert->pluginMismatched($root);
+        $cutlass->pluginMismatched($root);
 
         continue;
     }
 
-    $herbert->pluginMatched($root);
+    $cutlass->pluginMatched($root);
 
     @require_once $root.'/plugin.php';
 
-    $herbert->loadPlugin($config);
+    $cutlass->loadPlugin($config);
 }
 
 /**
- * Boot Herbert.
+ * Boot Cutlass.
  */
-$herbert->boot();
+$cutlass->boot();

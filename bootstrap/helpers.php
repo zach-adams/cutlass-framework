@@ -49,11 +49,11 @@ if ( ! function_exists('response'))
      * @param  string  $body
      * @param  integer $status
      * @param  array   $headers
-     * @return \Herbert\Framework\Response
+     * @return \Cutlass\Framework\Response
      */
     function response($body, $status = 200, $headers = null)
     {
-        return new Herbert\Framework\Response($body, $status, $headers);
+        return new Cutlass\Framework\Response($body, $status, $headers);
     }
 }
 
@@ -65,11 +65,11 @@ if ( ! function_exists('json_response'))
      * @param  mixed   $jsonable
      * @param  integer $status
      * @param  array   $headers
-     * @return \Herbert\Framework\Response
+     * @return \Cutlass\Framework\Response
      */
     function json_response($jsonable, $status = 200, $headers = null)
     {
-        return new Herbert\Framework\JsonResponse($jsonable, $status, $headers);
+        return new Cutlass\Framework\JsonResponse($jsonable, $status, $headers);
     }
 }
 
@@ -81,25 +81,25 @@ if ( ! function_exists('redirect_response'))
      * @param  string  $url
      * @param  integer $status
      * @param  array   $headers
-     * @return \Herbert\Framework\Response
+     * @return \Cutlass\Framework\Response
      */
     function redirect_response($url, $status = 302, $headers = null)
     {
-        return new Herbert\Framework\RedirectResponse($url, $status, $headers);
+        return new Cutlass\Framework\RedirectResponse($url, $status, $headers);
     }
 }
 
-if ( ! function_exists('herbert'))
+if ( ! function_exists('cutlass'))
 {
     /**
-     * Gets the herbert container.
+     * Gets the cutlass container.
      *
      * @param  string $binding
      * @return string
      */
-    function herbert($binding = null)
+    function cutlass($binding = null)
     {
-        $instance = Herbert\Framework\Application::getInstance();
+        $instance = Cutlass\Framework\Application::getInstance();
 
         if ( ! $binding)
         {
@@ -120,7 +120,7 @@ if ( ! function_exists('errors'))
      */
     function errors($key = null)
     {
-        $errors = herbert('errors');
+        $errors = cutlass('errors');
         $errors = isset($errors[0]) ? $errors[0] : $errors;
 
         if (!$key)
@@ -145,10 +145,10 @@ if ( ! function_exists('session'))
     {
         if ($key === null)
         {
-            return herbert('session');
+            return cutlass('session');
         }
 
-        return herbert('session')->get($key, $default);
+        return cutlass('session')->get($key, $default);
     }
 }
 
@@ -165,10 +165,10 @@ if ( ! function_exists('session_flashed'))
     {
         if ($key === null)
         {
-            return herbert('session')->getFlashBag();
+            return cutlass('session')->getFlashBag();
         }
 
-        return herbert('session')->getFlashBag()->get($key, $default);
+        return cutlass('session')->getFlashBag()->get($key, $default);
     }
 }
 
@@ -183,7 +183,7 @@ if ( ! function_exists('view'))
      */
     function view($name, $context = [])
     {
-        return response(herbert('Twig_Environment')->render($name, $context));
+        return response(cutlass('Twig_Environment')->render($name, $context));
     }
 }
 
@@ -198,7 +198,7 @@ if ( ! function_exists('panel_url'))
      */
     function panel_url($name, $query = [])
     {
-        return add_query_arg($query, herbert('panel')->url($name));
+        return add_query_arg($query, cutlass('panel')->url($name));
     }
 }
 
@@ -214,6 +214,6 @@ if ( ! function_exists('route_url'))
      */
     function route_url($name, $args = [], $query = [])
     {
-        return add_query_arg($query, herbert('router')->url($name, $args));
+        return add_query_arg($query, cutlass('router')->url($name, $args));
     }
 }

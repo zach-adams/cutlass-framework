@@ -1,6 +1,6 @@
 {
-  "name": "getherbert/herbert",
-  "description": "Herbert",
+  "name": "zach-adams/cutlass-framework",
+  "description": "Cutlass",
   "license": "MIT",
   "require": {
     "twig/twig": "~1.16",
@@ -11,7 +11,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Herbert\\Framework\\": "Herbert/Framework/"
+      "Cutlass\\Framework\\": "Cutlass/Framework/"
     }
   },
   "config": {

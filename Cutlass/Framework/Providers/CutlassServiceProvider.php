@@ -2,8 +2,6 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Cookie\CookieJar;
-use Cutlass\Framework\Session;
 
 class CutlassServiceProvider extends ServiceProvider {
 

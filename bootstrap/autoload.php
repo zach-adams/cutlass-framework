@@ -13,23 +13,16 @@ define('CUTLASS_AUTOLOAD', microtime(true));
 @require 'helpers.php';
 
 /**
- * Load the WP plugin system.
- */
-if (array_search(ABSPATH . 'wp-admin/includes/plugin.php', get_included_files()) === false)
-{
-    require_once ABSPATH . 'wp-admin/includes/plugin.php';
-}
-
-/**
  * Get Cutlass.
  */
 $cutlass = Cutlass\Framework\Application::getInstance();
 
 /**
- * Load all cutlass.php files in plugin roots.
+ * Load theme's cutlass.php file in theme directory
  */
-$iterator = new DirectoryIterator(plugin_directory());
 
+$iterator = new DirectoryIterator(themes_directory());
+$active_theme = get_template_directory();
 
 foreach ($iterator as $directory)
 {
@@ -45,49 +38,45 @@ foreach ($iterator as $directory)
         continue;
     }
 
-    $config = $cutlass->getPluginConfig($root);
+    $config = $cutlass->getThemeConfig($root);
 
-    $plugin = substr($root . '/plugin.php', strlen(plugin_directory()));
-    $plugin = ltrim($plugin, '/');
+    $theme = substr($root . '/theme.php', strlen(themes_directory()));
+    $theme = ltrim($theme, '/');
 
-    register_activation_hook($plugin, function () use ($cutlass, $config, $root)
+    wp_register_theme_activation_hook($theme, function () use ($cutlass, $config, $root)
     {
-        if ( ! $cutlass->pluginMatches($config))
+        if ( ! $cutlass->themeMatches($config))
         {
-            $cutlass->pluginMismatched($root);
+            $cutlass->themeMismatched($root);
         }
 
-        $cutlass->pluginMatched($root);
-        $cutlass->loadPlugin($config);
-        $cutlass->activatePlugin($root);
+        $cutlass->themeMatched($root);
+        $cutlass->loadTheme($config);
+        $cutlass->activateTheme($root);
     });
 
-    register_deactivation_hook($plugin, function () use ($cutlass, $root)
+    wp_register_theme_deactivation_hook($theme, function () use ($cutlass, $root)
     {
-        $cutlass->deactivatePlugin($root);
+        $cutlass->deactivateTheme($root);
     });
 
-    // Ugly hack to make the install hook work correctly
-    // as WP doesn't allow closures to be passed here
-    register_uninstall_hook($plugin, create_function('', 'cutlass()->deletePlugin(\'' . $root . '\');'));
-
-    if ( ! is_plugin_active($plugin))
+    if ( $theme != $active_theme)
     {
         continue;
     }
 
-    if ( ! $cutlass->pluginMatches($config))
+    if ( ! $cutlass->themeMatches($config))
     {
-        $cutlass->pluginMismatched($root);
+        $cutlass->themeMismatched($root);
 
         continue;
     }
 
-    $cutlass->pluginMatched($root);
+    $cutlass->themeMatched($root);
 
-    @require_once $root.'/plugin.php';
+    @require_once $root.'/theme.php';
 
-    $cutlass->loadPlugin($config);
+    $cutlass->loadTheme($config);
 }
 
 /**

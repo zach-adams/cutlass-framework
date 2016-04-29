@@ -1,9 +1,9 @@
 <?php namespace Cutlass\Framework\Base;
 
-use Cutlass\Framework\Plugin as PluginContract;
+use Cutlass\Framework\Theme as ThemeContract;
 use Illuminate\Contracts\Container\Container;
 
-class Plugin implements PluginContract {
+class Theme implements ThemeContract {
 
     /**
      * @var string
@@ -29,7 +29,7 @@ class Plugin implements PluginContract {
     }
 
     /**
-     * Activate the plugin.
+     * Activate the theme.
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class Plugin implements PluginContract {
     }
 
     /**
-     * Deactivate the plugin.
+     * Deactivate the theme.
      *
      * @return void
      */

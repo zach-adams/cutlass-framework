@@ -2,17 +2,17 @@
 
 use Illuminate\Contracts\Container\Container;
 
-interface Plugin {
+interface Theme {
 
     /**
-     * Activate the plugin.
+     * Activate the theme.
      *
      * @return void
      */
     public function activate();
 
     /**
-     * Deactivate the plugin.
+     * Deactivate the theme.
      *
      * @return void
      */

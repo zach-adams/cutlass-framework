@@ -11,7 +11,7 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     /**
      * The application's version.
      */
-    const VERSION = '0.9.13';
+    const VERSION = '0.0.1';
 
     /**
      * The application's version.
@@ -75,35 +75,35 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     protected $deferredServices = array();
 
     /**
-     * The registered plugins.
+     * The registered themes.
      *
      * @var array
      */
-    protected $plugins = [];
+    protected $themes = [];
 
     /**
-     * The mismatched plugins.
+     * The mismatched themes.
      *
      * @var array
      */
     protected $mismatched = [];
 
     /**
-     * The matched plugins.
+     * The matched themes.
      *
      * @var array
      */
     protected $matched = [];
 
     /**
-     * The plugin apis.
+     * The theme apis.
      *
      * @var array
      */
     protected $apis = [];
 
     /**
-     * The plugin configurations.
+     * The theme configurations.
      *
      * @var array
      */
@@ -158,22 +158,22 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Get all loaded plugins.
+     * Get all loaded themes.
      *
      * @return array
      */
-    public function getPlugins()
+    public function getThemes()
     {
-        return $this->plugins;
+        return $this->themes;
     }
 
     /**
-     * Gets a plugin's configuration.
+     * Gets a theme's configuration.
      *
      * @param  string $root
      * @return array
      */
-    public function getPluginConfig($root)
+    public function getThemeConfig($root)
     {
         if ( ! isset($this->configurations[$root]))
         {
@@ -184,12 +184,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Checks if a plugin version is matches.
+     * Checks if a theme version is matches.
      *
      * @param  array $config
      * @return bool
      */
-    public function pluginMatches($config)
+    public function themeMatches($config)
     {
         $constraint = array_get($config, 'constraint', self::VERSION);
 
@@ -197,29 +197,29 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Logs a plugin as incompatable.
+     * Logs a theme as incompatable.
      *
      * @param  string $root
      * @return void
      */
-    public function pluginMismatched($root)
+    public function themeMismatched($root)
     {
         $this->mismatched[] = $root;
     }
 
     /**
-     * Logs a plugin as compatable.
+     * Logs a theme as compatable.
      *
      * @param  string $root
      * @return void
      */
-    public function pluginMatched($root)
+    public function themeMatched($root)
     {
         $this->matched[] = $root;
     }
 
     /**
-     * Notifies the user of mismatched plugins.
+     * Notifies the user of mismatched themes.
      *
      * @return void
      */
@@ -235,76 +235,76 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
             return basename($value);
         }, $this->mismatched);
 
-        $message = 'Unfortunately plugin(s) '
+        $message = 'Unfortunately theme(s) '
                 . implode(', ', $mismatched)
-                . ' can’t work with the following plugin(s) '
+                . ' can’t work with the following theme(s) '
                 . implode(', ', $matched)
-                . '. Please disable and try updating all of the above plugins before reactivating.';
+                . '. Please disable and try updating all of the above theme before reactivating.';
 
         Notifier::error($message);
     }
 
     /**
-     * Loads a plugin.
+     * Loads a theme.
      *
      * @param  array $config
      * @return void
      */
-    public function loadPlugin($config)
+    public function loadTheme($config)
     {
-        $this->loadPluginRequires(
+        $this->loadThemeRequires(
             array_get($config, 'requires', [])
         );
 
-        $this->loadPluginRoutes(
+        $this->loadThemeRoutes(
             'router',
             array_get($config, 'routes', [])
         );
 
-        $this->loadPluginPanels(
+        $this->loadThemePanels(
             'panel',
             array_get($config, 'panels', [])
         );
 
-        $this->loadPluginX(
+        $this->loadThemeX(
             'enqueue',
             array_get($config, 'enqueue', [])
         );
 
-        $this->loadPluginX(
+        $this->loadThemeX(
             'shortcode',
             array_get($config, 'shortcodes', [])
         );
 
-        $this->loadPluginX(
+        $this->loadThemeX(
             'widget',
             array_get($config, 'widgets', [])
         );
 
-        $this->loadPluginAPIs(
+        $this->loadThemeAPIs(
             array_get($config, 'apis', [])
         );
 
-        $this->addPluginTwigNamespaces(
+        $this->addThemeTwigNamespaces(
             array_get($config, 'views', [])
         );
 
-        $this->addPluginViewGlobals(
+        $this->addThemeViewGlobals(
             array_get($config, 'viewGlobals', [])
         );
 
-        $this->addPluginComposers(
+        $this->addThemeComposers(
             array_get($config, 'viewComposers', [])
         );
     }
 
     /**
-     * Load all a plugin's requires.
+     * Load all a theme's requires.
      *
      * @param array $requires
      * @return void
      */
-    protected function loadPluginRequires($requires = [])
+    protected function loadThemeRequires($requires = [])
     {
         $container = $this;
 
@@ -315,12 +315,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Load all a plugin's routes.
+     * Load all a theme routes.
      *
      * @param array $routes
      * @return void
      */
-    protected function loadPluginRoutes($x, $routes = [])
+    protected function loadThemeRoutes($x, $routes = [])
     {
         $container = $this;
         $router = $this['router'];
@@ -339,12 +339,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Load all a plugin's panels.
+     * Load all a themes's panels.
      *
      * @param array $panels
      * @return void
      */
-    protected function loadPluginPanels($x, $panels = [])
+    protected function loadThemePanels($x, $panels = [])
     {
         $container = $this;
         $panel = $this['panel'];
@@ -363,12 +363,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Load all a plugin's :x.
+     * Load all a themes's :x.
      *
      * @param array $requires
      * @return void
      */
-    protected function loadPluginX($x, $requires = [])
+    protected function loadThemeX($x, $requires = [])
     {
         $container = $this;
         $$x = $this[$x];
@@ -380,12 +380,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Add all a plugin's twig namespaces.
+     * Add all a theme's twig namespaces.
      *
      * @param array $namespaces
      * @return void
      */
-    protected function addPluginTwigNamespaces($namespaces = [])
+    protected function addThemeTwigNamespaces($namespaces = [])
     {
         $loader = $this['twig.loader'];
 
@@ -399,12 +399,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Add all a plugin's view globals.
+     * Add all a themes's view globals.
      *
      * @param array $globals
      * @return void
      */
-    protected function addPluginViewGlobals($globals = [])
+    protected function addThemeViewGlobals($globals = [])
     {
         foreach ($globals as $key => $_globals)
         {
@@ -420,12 +420,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Add all a plugin's view composers.
+     * Add all a theme's view composers.
      *
      * @param array $composers
      * @return void
      */
-    protected function addPluginComposers($composers = [])
+    protected function addThemeComposers($composers = [])
     {
         foreach ($composers as $match => $_composers)
         {
@@ -434,12 +434,12 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Load the plugin's apis.
+     * Load the themes's apis.
      *
      * @param array $requires
      * @return void
      */
-    protected function loadPluginAPIs($requires = [])
+    protected function loadThemeAPIs($requires = [])
     {
         $container = $this;
 
@@ -454,39 +454,39 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Register a plugin.
+     * Register a theme.
      *
-     * @param \Cutlass\Framework\Plugin $plugin
+     * @param \Cutlass\Framework\Theme $theme
      */
-    public function registerPlugin(Plugin $plugin)
+    public function registerTheme(Theme $theme)
     {
-        $plugin->setContainer($this);
+        $theme->setContainer($this);
 
-        $this->plugins[] = $plugin;
+        $this->themes[] = $theme;
 
-        $this->registerPluginProviders($plugin);
-        $this->registerPluginAliases($plugin);
+        $this->registerThemeProviders($theme);
+        $this->registerThemeAliases($theme);
     }
 
     /**
-     * Deactivates a plugin.
+     * Deactivates a theme.
      *
      * @see register_activation_hook()
      * @param $root
      */
-    public function activatePlugin($root)
+    public function activateTheme($root)
     {
-        $plugins = array_filter($this->plugins, function (Plugin $plugin) use ($root)
+        $themes = array_filter($this->themes, function (Theme $theme) use ($root)
         {
-            return $plugin->getBasePath() === $root;
+            return $theme->getBasePath() === $root;
         });
 
-        foreach ($plugins as $plugin)
+        foreach ($themes as $theme)
         {
-            $plugin->activate();
+            $theme->activate();
         }
 
-        $config = $this->getPluginConfig($root);
+        $config = $this->getThemeConfig($root);
 
         foreach (array_get($config, 'tables', []) as $table => $class)
         {
@@ -525,24 +525,24 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Deactivates a plugin.
+     * Deactivates a theme.
      *
      * @see register_deactivation_hook()
      * @param $root
      */
-    public function deactivatePlugin($root)
+    public function deactivateTheme($root)
     {
-        $plugins = array_filter($this->plugins, function (Plugin $plugin) use ($root)
+        $themes = array_filter($this->themes, function (Theme $theme) use ($root)
         {
-            return $plugin->getBasePath() === $root;
+            return $theme->getBasePath() === $root;
         });
 
-        foreach ($plugins as $plugin)
+        foreach ($themes as $theme)
         {
-            $plugin->deactivate();
+            $theme->deactivate();
         }
 
-        $config = $this->getPluginConfig($root);
+        $config = $this->getThemeConfig($root);
 
         foreach (array_get($config, 'deactivators', []) as $deactivator)
         {
@@ -581,67 +581,6 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Deletes a plugin.
-     *
-     * @see register_uninstall_hook
-     * @param $root
-     */
-    public function deletePlugin($root)
-    {
-        $plugins = array_filter($this->plugins, function (Plugin $plugin) use ($root)
-        {
-            return $plugin->getBasePath() === $root;
-        });
-
-        foreach ($plugins as $plugin)
-        {
-            if ( ! method_exists($plugin, 'delete'))
-            {
-                continue;
-            }
-
-            $plugin->deactivate();
-        }
-
-        $config = $this->getPluginConfig($root);
-
-        foreach (array_get($config, 'deleters', []) as $deleter)
-        {
-            if ( ! file_exists($deleter))
-            {
-                continue;
-            }
-
-            $this->loadWith($deleter, [
-                'http',
-                'router',
-                'enqueue',
-                'panel',
-                'shortcode',
-                'widget'
-            ]);
-        }
-
-        foreach (array_get($config, 'tables', []) as $table => $class)
-        {
-            if ( ! class_exists($class))
-            {
-                continue;
-            }
-
-            if ( ! CapsuleManager::schema()->hasTable($table))
-            {
-                continue;
-            }
-
-            CapsuleManager::schema()->table($table, function (SchemaBlueprint $table) use ($class)
-            {
-                $this->call($class . '@delete', ['table' => $table, 'app' => $this]);
-            });
-        }
-    }
-
-    /**
      * Loads a file with variables in scope.
      *
      * @param  string $file
@@ -661,14 +600,14 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Register all of the plugin's providers.
+     * Register all of the theme's providers.
      *
-     * @param \Cutlass\Framework\Plugin $plugin
+     * @param \Cutlass\Framework\Theme $theme
      * @return void
      */
-    protected function registerPluginProviders(Plugin $plugin)
+    protected function registerThemeProviders(Theme $theme)
     {
-        $providers = array_get($plugin->getConfig(), 'providers', []);
+        $providers = array_get($theme->getConfig(), 'providers', []);
 
         foreach ($providers as $provider)
         {
@@ -679,14 +618,14 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Register all of the plugin's aliases.
+     * Register all of the theme's aliases.
      *
-     * @param \Cutlass\Framework\Plugin $plugin
+     * @param \Cutlass\Framework\Theme $theme
      * @return void
      */
-    protected function registerPluginAliases(Plugin $plugin)
+    protected function registerThemeAliases(Theme $theme)
     {
-        $aliases = array_get($plugin->getConfig(), 'aliases', []);
+        $aliases = array_get($theme->getConfig(), 'aliases', []);
 
         foreach ($aliases as $key => $aliases)
         {
@@ -698,13 +637,13 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
 //    /**
-//     * Register the plugin's configured requires.
+//     * Register the theme's configured requires.
 //     *
-//     * @param \Cutlass\Framework\Plugin $plugin
+//     * @param \Cutlass\Framework\Theme $theme
 //     */
-//    protected function registerPluginRequires(Plugin $plugin)
+//    protected function registerThemeRequires(Theme $theme)
 //    {
-//        $requires = array_get($plugin->getConfig(), 'requires', []);
+//        $requires = array_get($theme->getConfig(), 'requires', []);
 //        $container = $this;
 //
 //        foreach ($requires as $require)
@@ -714,13 +653,13 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
 //    }
 
 //    /**
-//     * Register the plugin's configured routes.
+//     * Register the theme's configured routes.
 //     *
-//     * @param \Cutlass\Framework\Plugin $plugin
+//     * @param \Cutlass\Framework\Theme $theme
 //     */
-//    protected function registerPluginRoutes(Plugin $plugin)
+//    protected function registerThemeRoutes(Theme $theme)
 //    {
-//        $requires = array_get($plugin->getConfig(), 'routes', []);
+//        $requires = array_get($theme->getConfig(), 'routes', []);
 //        $router = $this['router'];
 //
 //        foreach ($requires as $require)
@@ -730,13 +669,13 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
 //    }
 
 //    /**
-//     * Register the plugin's configured shortcodes.
+//     * Register the theme's configured shortcodes.
 //     *
-//     * @param \Cutlass\Framework\Plugin $plugin
+//     * @param \Cutlass\Framework\Theme $theme
 //     */
-//    protected function registerPluginShortcodes(Plugin $plugin)
+//    protected function registerThemeShortcodes(Theme $theme)
 //    {
-//        $requires = array_get($plugin->getConfig(), 'shortcodes', []);
+//        $requires = array_get($theme->getConfig(), 'shortcodes', []);
 //        $shortcode = $this['shortcode'];
 //
 //        foreach ($requires as $require)
@@ -1013,7 +952,7 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
             $this->bootProvider($p);
         });
 
-        array_walk($this->plugins, function ($p)
+        array_walk($this->themes, function ($p)
         {
             if ( ! method_exists($p, 'boot'))
             {

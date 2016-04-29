@@ -41,24 +41,24 @@ class Widget {
             {
                 $this->app->call(
                     [$instance, 'boot'],
-                    ['app' => $this->app, 'plugin' => $widget['plugin']]
+                    ['app' => $this->app, 'theme' => $widget['theme']]
                 );
             }
         }
     }
 
     /**
-     * Adds a wdiget.
+     * Adds a widget.
      *
      * @param  string $widget
-     * @param  Plugin $plugin
+     * @param  Theme $theme
      * @return void
      */
-    public function add($widget, Plugin $plugin = null)
+    public function add($widget, Theme $theme = null)
     {
         $this->widgets[] = [
             'class'  => $widget,
-            'plugin' => $plugin
+            'theme' => $theme
         ];
     }
 

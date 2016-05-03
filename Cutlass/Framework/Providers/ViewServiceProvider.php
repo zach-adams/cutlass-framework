@@ -34,7 +34,7 @@ class ViewServiceProvider extends ServiceProvider {
 			return [
 				'view.compiled' => $blade_cache,
 			];
-			
+
 		});
 
 		// The Compiler engine requires an instance of the CompilerInterface, which in
@@ -61,6 +61,8 @@ class ViewServiceProvider extends ServiceProvider {
 		$this->app->bind('view.finder', function ($app) {
 
 			$views_folder = [$this->app->getTheme()->config('views')];
+
+			dd($views_folder);
 
 			return new FileViewFinder($app['files'], $views_folder);
 

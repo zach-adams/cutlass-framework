@@ -64,8 +64,6 @@ class ViewServiceProvider extends ServiceProvider {
 
 			$views_folder = [$views_folder];
 
-			dd($views_folder);
-
 			return new FileViewFinder($app['files'], $views_folder);
 
 		});

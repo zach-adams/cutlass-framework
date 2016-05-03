@@ -72,6 +72,8 @@ foreach ($iterator as $directory)
         continue;
     }
 
+    dd($root);
+
     $cutlass->themeMatched($root);
 
     @require_once $root.'/theme.php';

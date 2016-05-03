@@ -56,7 +56,7 @@ class ViewServiceProvider extends ServiceProvider {
 			{
 				$paths[] = $theme->getBasePath() . '/resources/views';
 			}
-			dd($this->app->getThemes());
+			dd($app);
 
 			return new FileViewFinder($app['files'], $paths);
 		});

@@ -1155,7 +1155,7 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     /**
      * Get the global container instance.
      *
-     * @return static
+     * @return Application
      */
     public static function getInstance()
     {

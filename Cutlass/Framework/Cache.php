@@ -8,13 +8,17 @@ use Webmozart\Assert\Assert;
 class Cache {
 
 	/**
-	 * @param $view Factory|BladeCompiler
-	 * @param $path string
+	 * @param $view \Illuminate\View\Factory|\Illuminate\View\Compilers\BladeCompiler
+	 * @param $path string|null
 	 *
 	 * @return bool
 	 */
-	public static function is_expired($view, $path)
+	public static function isExpired($view, $path = null)
 	{
+
+		if(false === self::isCacheEnabled()) {
+			return true;
+		}
 
 		/**
 		 * If we're debugging we'll set all cache files to expired
@@ -26,13 +30,13 @@ class Cache {
 		/**
 		 * If the cache file doesn't exist or isn't readable then it's considered expired
 		 */
-		if(!is_readable($path)) {
+		if(!is_null($path) && !is_readable($path)) {
 			return true;
 		}
 
 		/**
 		 * Use Blade Compiler to make sure it can read the cache file alright
-		 * @var $blade_compiler BladeCompiler
+		 * @var $blade_compiler \Illuminate\View\Compilers\BladeCompiler
 		 */
 		$blade_compiler = cutlass('blade.compiler');
 
@@ -41,6 +45,74 @@ class Cache {
 		}
 
 		return false;
+
+	}
+
+
+	/**
+	 * @param $view \Illuminate\View\Factory|\Illuminate\View\Compilers\BladeCompiler
+	 *
+	 * @return bool
+	 */
+	public static function deleteCachedFile($view)
+	{
+
+		if(!$view instanceof Factory && !$view instanceof BladeCompiler) {
+			throw new InvalidArgumentException(sprintf('The object %s is not an instace of \Illuminate\View\Compilers\BladeCompiler or \Illuminate\View\Factory.', self::valueToString($view)));
+		}
+
+		return self::deleteFile($view->getPath());
+
+	}
+
+
+	/**
+	 * Deletes a given file
+	 *
+	 * @param string|\Illuminate\View\Compilers\BladeCompiler $file
+	 *
+	 * @return mixed
+	 */
+	public static function deleteFile($file)
+	{
+
+		if($file instanceof BladeCompiler) {
+			$file = $file->getPath();
+		}
+
+		Assert::file($file, '$file must be a Blade Compiler or a valid file.');
+		Assert::writable($file, '$file must be writable.');
+
+		$file = realpath($file);
+
+		return unlink($file);
+
+	}
+
+
+	/**
+	 * Checks to see if the Cache is enabled
+	 *
+	 * @return bool
+	 */
+	public static function isCacheEnabled()
+	{
+
+		/**
+		 * @var Application $app
+		 */
+		$app = cutlass();
+
+		/**
+		 * @var \Cutlass\Framework\Base\Theme $theme
+		 */
+		$theme = $app->getTheme();
+
+		$blade_cache_enabled = $theme->config('blade_cache_enabled');
+
+		Assert::boolean($blade_cache_enabled, '$blade_cache_enabled must be a boolean value.');
+
+		return $blade_cache_enabled;
 
 	}
 
@@ -58,12 +130,9 @@ class Cache {
 		 */
 		$app = cutlass();
 
-		/**
-		 * @var Theme $theme
-		 */
-		$theme = $app->getTheme();
+		$blade_cache = $app->getTheme()->config('blade_cache');
 
-		$cache_path = rtrim($theme->getBasePath(), '/') . '/' . ltrim($theme->config('blade_cache'), '/');
+		$cache_path = rtrim($app->getTheme()->getBasePath(), '/') . '/' . ltrim($blade_cache, '/');
 
 		if(!wp_is_writable($cache_path)) {
 			wp_mkdir_p($cache_path);

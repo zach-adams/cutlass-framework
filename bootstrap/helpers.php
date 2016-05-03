@@ -1,5 +1,8 @@
 <?php
 
+use Cutlass\Framework\Application;
+use Cutlass\Framework\Cache;
+
 if ( ! function_exists('dd'))
 {
     /**
@@ -131,10 +134,13 @@ if ( ! function_exists('cutlass'))
      * Gets the cutlass container.
      *
      * @param  string $binding
-     * @return string
+     * @return string|Application
      */
     function cutlass($binding = null)
     {
+        /**
+         * @var $instance Application
+         */
         $instance = Cutlass\Framework\Application::getInstance();
 
         if ( ! $binding)
@@ -219,10 +225,21 @@ if (! function_exists('view')) {
      */
     function view($view = null, $data = [], $mergeData = [])
     {
+        /**
+         * @var \Illuminate\View\Factory $factory
+         */
         $factory = cutlass('view');
 
         if (func_num_args() === 0) {
             return $factory;
+        }
+        
+        if(false === Cache::isCacheEnabled()) {
+
+            $cache_path = Cache::path();
+
+            Cache::deleteAllViews($cache_path);
+
         }
 
         return $factory->make($view, $data, $mergeData);

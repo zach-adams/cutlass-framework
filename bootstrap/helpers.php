@@ -185,20 +185,27 @@ if ( ! function_exists('session_flashed'))
     }
 }
 
-if ( ! function_exists('view'))
-{
+if (! function_exists('view')) {
     /**
-     * Renders a twig view.
+     * Get the evaluated view contents for the given view.
      *
-     * @param  string $name
-     * @param  array  $context
-     * @return string
+     * @param  string  $view
+     * @param  array   $data
+     * @param  array   $mergeData
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    function view($name, $context = [])
+    function view($view = null, $data = [], $mergeData = [])
     {
-        return response(cutlass('view')->render($name, $context));
+        $factory = cutlass('view');
+
+        if (func_num_args() === 0) {
+            return $factory;
+        }
+
+        return $factory->make($view, $data, $mergeData);
     }
 }
+
 
 if ( ! function_exists('panel_url'))
 {

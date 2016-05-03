@@ -696,7 +696,7 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
         ));
 
         $this->register($this->resolveProviderClass(
-            'Cutlass\Framework\Providers\TwigServiceProvider'
+            'Illuminate\View\ViewServiceProvider'
         ));
     }
 

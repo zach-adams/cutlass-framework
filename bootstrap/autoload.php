@@ -61,9 +61,6 @@ foreach ($iterator as $directory)
         $cutlass->deactivateTheme($root);
     });
 
-    var_dump($active_theme);
-    dd($theme);
-
     if ( $theme != $active_theme)
     {
         continue;
@@ -77,6 +74,8 @@ foreach ($iterator as $directory)
     }
 
     $cutlass->themeMatched($root);
+
+    dd($root);
 
     @require_once $root.'/theme.php';
 

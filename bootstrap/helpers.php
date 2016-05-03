@@ -41,6 +41,27 @@ if ( ! function_exists('content_directory'))
     }
 }
 
+if ( ! function_exists('upload_directory'))
+{
+    /**
+     * Gets the upload directory.
+     *
+     * @return string
+     */
+    function upload_directory()
+    {
+
+        $path = wp_upload_dir()['basedir'];
+
+        if (is_multisite() && ! (is_main_network() && is_main_site() && defined('MULTISITE'))) {
+            $path = realpath($path . '/../..');
+        }
+
+        return $path;
+
+    }
+}
+
 if ( ! function_exists('plugin_directory'))
 {
     /**

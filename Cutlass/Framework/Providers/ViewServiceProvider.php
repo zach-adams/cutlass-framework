@@ -34,6 +34,7 @@ class ViewServiceProvider extends ServiceProvider {
 			return [
 				'view.compiled' => $blade_cache,
 			];
+			
 		});
 
 		// The Compiler engine requires an instance of the CompilerInterface, which in

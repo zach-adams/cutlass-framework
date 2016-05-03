@@ -285,9 +285,9 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
             array_get($config, 'apis', [])
         );
 
-        $this->addThemeTwigNamespaces(
+        /**$this->addThemeTwigNamespaces(
             array_get($config, 'views', [])
-        );
+        );*/
 
         $this->addThemeViewGlobals(
             array_get($config, 'viewGlobals', [])

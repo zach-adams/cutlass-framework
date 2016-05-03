@@ -60,7 +60,9 @@ class ViewServiceProvider extends ServiceProvider {
 	{
 		$this->app->bind('view.finder', function ($app) {
 
-			$views_folder = [$this->app->getTheme()->config('views')];
+			$views_folder = rtrim($this->app->getTheme()->getBasePath(), '/') . '/' . ltrim($this->app->getTheme()->config('views'), '/');
+
+			$views_folder = [$views_folder];
 
 			dd($views_folder);
 

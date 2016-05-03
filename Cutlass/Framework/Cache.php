@@ -169,7 +169,7 @@ class Cache {
 			throw new InvalidArgumentException(sprintf('The glob %s is not valid.', self::valueToString($glob)));
 		}
 
-		array_map('unlink', glob($path."/**/*.php"));
+		array_map('unlink', $views);
 
 	}
 

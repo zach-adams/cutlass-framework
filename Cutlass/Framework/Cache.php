@@ -1,6 +1,5 @@
 <?php namespace Cutlass\Framework;
 
-use Cutlass\Framework\Base\Theme;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Factory;
 use InvalidArgumentException;

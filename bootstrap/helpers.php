@@ -57,6 +57,8 @@ if ( ! function_exists('upload_directory'))
             $path = realpath($path . '/../..');
         }
 
+        $path = rtrim($path, '/');
+
         return $path;
 
     }

@@ -154,7 +154,7 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
      */
     public function basePath()
     {
-        return content_directory() . '/cutlass-cache';
+        return upload_directory() . '/.cutlass-cache';
     }
 
     /**

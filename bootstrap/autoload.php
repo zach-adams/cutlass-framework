@@ -40,7 +40,7 @@ foreach ($iterator as $directory)
 
     $config = $cutlass->getThemeConfig($root);
 
-    $theme = substr($root . '/theme.php', strlen(themes_directory()));
+    $theme = substr($root, strlen(themes_directory()));
     $theme = ltrim($theme, '/');
 
     wp_register_theme_activation_hook($theme, function () use ($cutlass, $config, $root)

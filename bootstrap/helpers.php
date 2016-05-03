@@ -112,7 +112,6 @@ if ( ! function_exists('cutlass'))
      */
     function cutlass($binding = null)
     {
-        var_dump($binding);die();
         $instance = Cutlass\Framework\Application::getInstance();
 
         if ( ! $binding)

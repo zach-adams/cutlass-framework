@@ -933,7 +933,11 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
             $this->bootProvider($p);
         });
 
-        $this->call([$this->theme, 'boot'], ['app' => $this]);
+        if(method_exists($this->theme, 'boot')) {
+
+            $this->call([$this->theme, 'boot'], ['app' => $this]);
+
+        }
 
         if (count($this->mismatched) !== 0)
         {

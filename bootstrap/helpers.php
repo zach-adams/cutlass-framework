@@ -196,7 +196,7 @@ if ( ! function_exists('view'))
      */
     function view($name, $context = [])
     {
-        dd($name);
+        var_dump("hi");die();
         return response(cutlass('view')->render($name, $context));
     }
 }

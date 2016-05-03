@@ -3,6 +3,8 @@
 /**
  * Ensure this is only ran once.
  */
+use Cutlass\Framework\Base\Theme;
+
 if (defined('CUTLASS_AUTOLOAD'))
 {
     return;
@@ -77,6 +79,7 @@ foreach ($iterator as $directory)
 
     @require_once $root.'/theme.php';
 
+    $cutlass->registerTheme(new Theme($root));
     $cutlass->loadTheme($config);
 }
 

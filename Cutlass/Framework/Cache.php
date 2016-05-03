@@ -169,6 +169,8 @@ class Cache {
 			throw new InvalidArgumentException(sprintf('The glob %s is not valid.', self::valueToString($glob)));
 		}
 
+		dd($views);
+
 		array_map('unlink', $views);
 
 	}

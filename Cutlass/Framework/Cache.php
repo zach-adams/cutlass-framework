@@ -161,6 +161,8 @@ class Cache {
 		Assert::directory($path, '$path must be a valid directory.');
 		Assert::readable($path, '$path must be a valid directory.');
 
+		dd($path);
+
 		Cache::setPermissions($path);
 
 		$views = glob($path . '/' . ltrim($glob, '/'));
@@ -168,8 +170,6 @@ class Cache {
 		if(false === $views) {
 			throw new InvalidArgumentException(sprintf('The glob %s is not valid.', self::valueToString($glob)));
 		}
-
-		dd($views);
 
 		array_map('unlink', $views);
 

@@ -161,7 +161,7 @@ class Cache {
 		Assert::directory($path, '$path must be a valid directory.');
 		Assert::readable($path, '$path must be a valid directory.');
 
-		dd($path);
+		dd($path . '/' . ltrim($glob, '/'));
 
 		Cache::setPermissions($path);
 

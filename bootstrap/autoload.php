@@ -80,6 +80,8 @@ foreach ($iterator as $directory)
     $cutlass->loadTheme($config);
 }
 
+dd($cutlass);
+
 /**
  * Boot Cutlass.
  */

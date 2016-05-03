@@ -14,6 +14,7 @@ class ViewServiceProvider extends ServiceProvider {
 	/**
 	 * Register the Blade engine implementation.
 	 *
+	 * @todo    Spruce this up
 	 * @param  \Illuminate\View\Engines\EngineResolver  $resolver
 	 * @return void
 	 */
@@ -23,7 +24,13 @@ class ViewServiceProvider extends ServiceProvider {
 
 		$this->app->bind('blade.options', function ()
 		{
+
 			$blade_cache = content_directory() . '/blade-cache';
+
+			foreach ($this->app->getThemes() as $theme)
+			{
+				$blade_cache = $theme->getBasePath() . '/storage/framework/views/';
+			}
 
 			if(!wp_is_writable($blade_cache)) {
 				wp_mkdir_p($blade_cache);

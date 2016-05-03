@@ -695,9 +695,9 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
             'Cutlass\Framework\Providers\CutlassServiceProvider'
         ));
 
-        /*$this->register($this->resolveProviderClass(
+        $this->register($this->resolveProviderClass(
             'Cutlass\Framework\Providers\ViewServiceProvider'
-        ));*/
+        ));
     }
 
     /**

@@ -675,6 +675,10 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
         $this->register($this->resolveProviderClass(
             'Cutlass\Framework\Providers\ViewServiceProvider'
         ));
+
+        $this->register($this->resolveProviderClass(
+            'Illuminate\Filesystem\FilesystemServiceProvider'
+        ));
     }
 
     /**

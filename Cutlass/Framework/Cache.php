@@ -1,5 +1,6 @@
 <?php namespace Cutlass\Framework;
 
+use Cutlass\Framework\Base\Theme;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Factory;
 use InvalidArgumentException;
@@ -53,7 +54,21 @@ class Cache {
 	public static function path()
 	{
 
-		$cache_path = upload_directory() . '/.cutlass-cache';
+		/**
+		 * @var Application $app
+		 */
+		$app = cutlass();
+
+		/**
+		 * @var Theme $theme
+		 */
+		$theme = $app->getTheme();
+
+		$cache_path = rtrim($theme->getBasePath(), '/') . '/' . ltrim($theme->config('blade_cache'), '/');
+
+		if(!wp_is_writable($cache_path)) {
+			wp_mkdir_p($cache_path);
+		}
 
 		return realpath($cache_path);
 

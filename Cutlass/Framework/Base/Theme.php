@@ -2,6 +2,7 @@
 
 use Cutlass\Framework\Theme as ThemeContract;
 use Illuminate\Contracts\Container\Container;
+use Webmozart\Assert\Assert;
 
 class Theme implements ThemeContract {
 
@@ -55,14 +56,44 @@ class Theme implements ThemeContract {
      */
     public function getConfig()
     {
-        if (is_null($this->config))
-        {
-            $this->config = file_exists("{$this->getBasePath()}/cutlass.config.php")
+
+        $config = $this->config;
+
+        if (is_null($config)) {
+            $config = file_exists("{$this->getBasePath()}/cutlass.config.php")
                 ? require "{$this->getBasePath()}/cutlass.config.php"
                 : [];
+        } else {
+            return $config;
         }
 
-        return $this->config;
+        $this->config = array_dot($config);
+
+        return $config;
+
+    }
+
+
+    /**
+     * Returns an option
+     *
+     * @param string|null $option
+     *
+     * @return array|mixed
+     */
+    public function config($option = null) {
+
+        $config = $this->getConfig();
+
+        if(null === $option) {
+            return $config;
+        }
+
+        Assert::string($option, '$option must be a string');
+        Assert::keyExists($config, $option, $option . ' is not a valid option.');
+
+        return $config[$option];
+
     }
 
     /**

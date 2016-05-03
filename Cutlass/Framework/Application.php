@@ -1,5 +1,7 @@
 <?php namespace Cutlass\Framework;
 
+use Cutlass\Framework\Base\Theme;
+use Cutlass\Framework\Theme as ITheme;
 use Illuminate\Support\ServiceProvider;
 use vierbergenlars\SemVer\version as SemVersion;
 use vierbergenlars\SemVer\expression as SemVersionExpression;
@@ -75,11 +77,11 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     protected $deferredServices = array();
 
     /**
-     * The registered themes.
+     * The registered theme.
      *
-     * @var array
+     * @var Theme
      */
-    protected $themes = [];
+    protected $theme;
 
     /**
      * The mismatched themes.
@@ -158,13 +160,13 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Get all loaded themes.
+     * Get the loaded theme.
      *
-     * @return array
+     * @return Theme
      */
-    public function getThemes()
+    public function getTheme()
     {
-        return $this->themes;
+        return $this->theme;
     }
 
     /**
@@ -335,7 +337,7 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     }
 
     /**
-     * Load all a themes's panels.
+     * Load all a theme's panels.
      *
      * @param array $panels
      * @return void
@@ -433,35 +435,34 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     /**
      * Register a theme.
      *
-     * @param \Cutlass\Framework\Theme $theme
+     * @param ITheme $theme
      */
-    public function registerTheme(Theme $theme)
+    public function registerTheme(ITheme $theme)
     {
         $theme->setContainer($this);
 
-        $this->themes[] = $theme;
+        $this->theme = $theme;
 
         $this->registerThemeProviders($theme);
         $this->registerThemeAliases($theme);
     }
 
     /**
-     * Deactivates a theme.
+     * Activates a theme.
      *
      * @see register_activation_hook()
      * @param $root
      */
     public function activateTheme($root)
     {
-        $themes = array_filter($this->themes, function (Theme $theme) use ($root)
-        {
-            return $theme->getBasePath() === $root;
-        });
 
-        foreach ($themes as $theme)
-        {
-            $theme->activate();
+        $theme = $this->theme;
+
+        if($root !== $theme->getBasePath()) {
+            return;
         }
+
+        $theme->activate();
 
         $config = $this->getThemeConfig($root);
 
@@ -509,15 +510,14 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
      */
     public function deactivateTheme($root)
     {
-        $themes = array_filter($this->themes, function (Theme $theme) use ($root)
-        {
-            return $theme->getBasePath() === $root;
-        });
 
-        foreach ($themes as $theme)
-        {
-            $theme->deactivate();
+        $theme = $this->theme;
+
+        if($root !== $theme->getBasePath()) {
+            return;
         }
+
+        $theme->deactivate();
 
         $config = $this->getThemeConfig($root);
 
@@ -579,10 +579,10 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     /**
      * Register all of the theme's providers.
      *
-     * @param \Cutlass\Framework\Theme $theme
+     * @param ITheme $theme
      * @return void
      */
-    protected function registerThemeProviders(Theme $theme)
+    protected function registerThemeProviders(ITheme $theme)
     {
         $providers = array_get($theme->getConfig(), 'providers', []);
 
@@ -597,10 +597,10 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     /**
      * Register all of the theme's aliases.
      *
-     * @param \Cutlass\Framework\Theme $theme
+     * @param ITheme $theme
      * @return void
      */
-    protected function registerThemeAliases(Theme $theme)
+    protected function registerThemeAliases(ITheme $theme)
     {
         $aliases = array_get($theme->getConfig(), 'aliases', []);
 

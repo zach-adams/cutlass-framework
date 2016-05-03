@@ -191,7 +191,7 @@ class Cache {
 
 		Assert::directory($path, '$path must be a valid directory.');
 		Assert::readable($path, '$path must be a valid directory.');
-		Assert::allDigits($permissions, '$permissions must be a valid directory permissions setting');
+		Assert::integer($permissions, '$permissions must be a valid directory permissions setting');
 		Assert::length($permissions, 3, '$permissions must be a valid directory permissions setting');
 
 		chmod($path, octdec($permissions));

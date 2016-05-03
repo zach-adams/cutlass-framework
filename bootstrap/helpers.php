@@ -112,6 +112,7 @@ if ( ! function_exists('cutlass'))
      */
     function cutlass($binding = null)
     {
+        var_dump($binding);die();
         $instance = Cutlass\Framework\Application::getInstance();
 
         if ( ! $binding)
@@ -196,7 +197,6 @@ if ( ! function_exists('view'))
      */
     function view($name, $context = [])
     {
-        var_dump("hi");die();
         return response(cutlass('view')->render($name, $context));
     }
 }

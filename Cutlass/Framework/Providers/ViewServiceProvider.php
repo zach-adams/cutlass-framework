@@ -23,8 +23,14 @@ class ViewServiceProvider extends ServiceProvider {
 
 		$this->app->bind('blade.options', function ()
 		{
+			$blade_cache = content_directory() . '/blade-cache';
+
+			if(!wp_is_writable($blade_cache)) {
+				wp_mkdir_p($blade_cache);
+			}
+
 			return [
-				'view.compiled' => content_directory() . '/blade-cache',
+				'view.compiled' => $blade_cache,
 			];
 		});
 

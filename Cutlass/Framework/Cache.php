@@ -151,7 +151,7 @@ class Cache {
 	 *
 	 * @return void
 	 */
-	public static function deleteAllViews($path = null, $glob = "/**/*.php")
+	public static function deleteAllViews($path = null, $glob = "/*")
 	{
 
 		if(null === $path) {
@@ -160,8 +160,6 @@ class Cache {
 
 		Assert::directory($path, '$path must be a valid directory.');
 		Assert::readable($path, '$path must be a valid directory.');
-
-		dd($path . '/' . ltrim($glob, '/'));
 
 		Cache::setPermissions($path);
 

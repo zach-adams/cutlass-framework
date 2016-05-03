@@ -23,7 +23,7 @@ $cutlass = Cutlass\Framework\Application::getInstance();
 
 $iterator = new DirectoryIterator(themes_directory());
 $active_theme = substr(get_template_directory(), strlen(themes_directory()));
-$active_theme = ltrim($active_theme);
+$active_theme = ltrim($active_theme, '/');
 
 foreach ($iterator as $directory)
 {
@@ -42,7 +42,7 @@ foreach ($iterator as $directory)
     $config = $cutlass->getThemeConfig($root);
 
     $theme = substr($root, strlen(themes_directory()));
-    $theme = ltrim($theme);
+    $theme = ltrim($theme, '/');
 
     wp_register_theme_activation_hook($theme, function () use ($cutlass, $config, $root)
     {
